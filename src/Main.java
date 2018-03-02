@@ -123,8 +123,10 @@ public class Main {
         System.out.print("\n");
     }
 
-    //Comparamos los caracteres de nuestra contrasena con el que contiene todos los faltantes
-    //para removerlos y tener una lista mas limpia.
+    //Comparamos los caracteres de nuestra contraseña con el que 
+    //contiene todos los demás para eliminar los de nuestra contraseña
+    //en este y así tener los que se pondrán en las matrices de los 
+    //pisos una vez que ya se haya puesto la contraseña
     public static ArrayList<String> preLlenado (ArrayList<String> passwd) {
         for (int i= 0 ; i < passwd.size();i++) {
             for (int j=0; j< listpass.size(); j++){
