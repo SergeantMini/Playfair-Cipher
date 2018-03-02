@@ -11,6 +11,10 @@ public class Main {
     static String[][] floor3 = new String [4][4];
     static String[][] floor4 = new String [4][4];
 
+    //Listas de posiciones para encriptacion
+    static ArrayList<Integer> positions = new ArrayList<Integer>();
+
+
     //Revisamos la contrasena para que salga sin letras repetidas
     public static ArrayList<String> checkPass (String password) {
         newpass.add(String.valueOf(password.charAt(0)));
@@ -84,28 +88,39 @@ public class Main {
         //IMPRIMIMOS LAS MATRICES PARA REVISAR SU LLENADO
         for (int l = 0; l < 4; l++) {
             for (int m = 0; m < 4; m++) {
-                System.out.println(floor1[l][m]);
+                System.out.print(floor1[l][m]);
             }
+            System.out.print("\n");
         }
+
+        System.out.print("\n");
 
         for (int l = 0; l < 4; l++) {
             for (int m = 0; m < 4; m++) {
-                System.out.println(floor2[l][m]);
+                System.out.print(floor2[l][m]);
             }
+            System.out.print("\n");
         }
+
+        System.out.print("\n");
 
         for (int l = 0; l < 4; l++) {
             for (int m = 0; m < 4; m++) {
-                System.out.println(floor3[l][m]);
+                System.out.print(floor3[l][m]);
             }
+            System.out.print("\n");
         }
+
+        System.out.print("\n");
 
         for (int l = 0; l < 4; l++) {
             for (int m = 0; m < 4; m++) {
-                System.out.println(floor4[l][m]);
+                System.out.print(floor4[l][m]);
             }
+            System.out.print("\n");
         }
 
+        System.out.print("\n");
     }
 
     //Comparamos los caracteres de nuestra contrasena con el que contiene todos los faltantes
@@ -118,7 +133,7 @@ public class Main {
                 }
             }
         }
-        System.out.println(listpass);
+        //System.out.println(listpass);
         return listpass;
     }
 
@@ -128,38 +143,93 @@ public class Main {
         int j = 0;
         String[][] trigramas = new String[message.length()/2][3];
         for (int i=0; i < message.length(); i = i+3) {
-            if (message.charAt(i) != message.charAt(i+1) && message.charAt(i+1) != message.charAt(i+2)) {
-                trigramas[j][0] = String.valueOf(message.charAt(i));
-                trigramas[j][1] = String.valueOf(message.charAt(i+1));
-                trigramas[j][2] = String.valueOf(message.charAt(i+2));
-                j++;
+            if (!((i+2) >= message.length())){
+                if (message.charAt(i) != message.charAt(i+1) && message.charAt(i+1) != message.charAt(i+2)) {
+                    trigramas[j][0] = String.valueOf(message.charAt(i));
+                    trigramas[j][1] = String.valueOf(message.charAt(i+1));
+                    trigramas[j][2] = String.valueOf(message.charAt(i+2));
+                    j++;
+
+                } else if (message.charAt(i) != message.charAt(i+1)) {
+                    trigramas[j][0] = String.valueOf(message.charAt(i));
+                    trigramas[j][1] = String.valueOf(message.charAt(i+1));
+                    trigramas[j][2] = "X";
+                    i--;
+                    j++;
+
+                } else {
+                    trigramas[j][0] = String.valueOf(message.charAt(i));
+                    trigramas[j][1] = "X";
+                    trigramas[j][2] = String.valueOf(message.charAt(i+1));
+                    i--;
+                    j++;
+                }
             }
-            else if (String.valueOf(message.charAt(i)) != String.valueOf(message.charAt(i+1))) {
-                trigramas[j][0] = String.valueOf(message.charAt(i));
-                trigramas[j][1] = String.valueOf(message.charAt(i+1));
-                trigramas[j][2] = "X";
-                i--;
-                j++;
+
+            if ( ((i+2) >= message.length()) &&  !((i+1) >= message.length())){
+                if (message.charAt(i) != message.charAt(i+1)) {
+                    trigramas[j][0] = String.valueOf(message.charAt(i));
+                    trigramas[j][1] = String.valueOf(message.charAt(i+1));
+                    trigramas[j][2] = "X";
+                    i--;
+                    j++;
+                } else {
+                    trigramas[j][0] = String.valueOf(message.charAt(i));
+                    trigramas[j][1] = "X";
+                    trigramas[j][2] = String.valueOf(message.charAt(i+1));
+                    i--;
+                    j++;
+                }
             }
-            else {
+            if ( ((i+2) >= message.length()) &&  ((i+1) >= message.length())){
                 trigramas[j][0] = String.valueOf(message.charAt(i));
                 trigramas[j][1] = "X";
-                trigramas[j][2] = String.valueOf(message.charAt(i+1));
-                i--;
-                j++;
+                trigramas[j][2] = "Z";
             }
         }
-        for (int l = 0; l < (message.length()/2) +1; l++) {
+        for (int l = 0; l < (message.length()/2); l++) {
             for (int m = 0; m < 3; m++) {
-                System.out.println(trigramas[l][m]);
+                System.out.print(trigramas[l][m]);
             }
+            System.out.print(" ");
         }
         return trigramas;
     }
 
+    public static void buscarPosiciones(String[][] resultante) {
+        int j = 0;
+        for (int i = 0; i < 1; i++) {
+            if (resultante[j][i].equals(floor1[j][i])) {
+                System.out.println("ifoundu");
+                //j++
+            }
+            if (resultante[j][i] == floor2[j][i]) {
+                System.out.println("ifoundu");
+                //j++;
+            }
+            else if (resultante[j][i] == floor3[j][i]) {
+                System.out.println("ifoundu");
+                //j++;
+            }
+            else if (resultante[j][i] == floor4[j][i]) {
+                System.out.println("ifoundu");
+                //j++;
+            }
+            j++;
+        }
+    }
+
+    /*
+    public static String[][] encriptar(String[][] trigramas) {
+        for(int i = 0; i < trigramas.length; i++) {
+            if()
+        }
+    }*/
+
     public static void main(String[] args) {
 
-        //Obtenemos todos los caracteres necesarios con base al codigo ascii
+        //Obtenemos todos los caracteres necesarios con base al codigo ascii y los almacenamos
+        //en listpass
 
         //LETRAS
         for(int i=48; i < 58; i++) {
@@ -213,6 +283,7 @@ public class Main {
         ArrayList<String> passwd = checkPass(password);
         listpass =(preLlenado(passwd));
         llenarMatrices(passwd);
-        crearTrigramas(message);
+        String[][] resultante = crearTrigramas(message);
+        buscarPosiciones(resultante);
     }
 }
