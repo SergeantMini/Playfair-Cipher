@@ -2,6 +2,7 @@ import java.util.*;
 
 public class Main {
 
+    //Listas para contraseña y contenido que se almacenara en los floors
     static ArrayList<String> newpass = new ArrayList<String>();
     static ArrayList<String> listpass = new ArrayList<String>();
 
@@ -15,7 +16,6 @@ public class Main {
     static int[] primeraLetra = new int[3];
     static int[] segundaLetra = new int[3];
     static int[] terceraLetra = new int[3];
-
 
     //Revisamos la contrasena para que salga sin letras repetidas
     public static ArrayList<String> checkPass (String password) {
@@ -168,7 +168,7 @@ public class Main {
                 }
             }
 
-            if ( ((i+2) >= message.length()) &&  !((i+1) >= message.length())){
+            if (((i+2) >= message.length()) &&  !((i+1) >= message.length())){
                 if (message.charAt(i) != message.charAt(i+1)) {
                     trigramas[j][0] = String.valueOf(message.charAt(i));
                     trigramas[j][1] = String.valueOf(message.charAt(i+1));
@@ -183,7 +183,7 @@ public class Main {
                     j++;
                 }
             }
-            if ( ((i+2) >= message.length()) &&  ((i+1) >= message.length())){
+            if (((i+2) >= message.length()) &&  ((i+1) >= message.length())){
                 trigramas[j][0] = String.valueOf(message.charAt(i));
                 trigramas[j][1] = "X";
                 trigramas[j][2] = "Z";
@@ -195,9 +195,11 @@ public class Main {
             }
             System.out.print(" ");
         }
+        System.out.print("\n");
         return trigramas;
     }
 
+    //Esta funcion busca la posicion en la que se encuentra la letra que esta recibe entre los floors
     public static int[] encontrarPosicion(String letra) {
         boolean encontrado = false;
         int[] posicion = new int[3];
@@ -211,6 +213,7 @@ public class Main {
                 }
             }
         }
+
         if(encontrado==false){
             for(int i=0; i <4;i++){
                 for (int j=0;j<4;j++){
@@ -222,7 +225,9 @@ public class Main {
                     }
                 }
             }
-        } else if(encontrado==false){
+        }
+
+        if(encontrado==false){
             for(int i=0; i <4;i++){
                 for (int j=0;j<4;j++){
                     if(floor3[i][j].equals(letra)){
@@ -233,16 +238,16 @@ public class Main {
                     }
                 }
             }
-        } else {
-            if(encontrado==false){
-                for(int i=0; i <4;i++){
-                    for (int j=0;j<4;j++){
-                        if(floor4[i][j].equals(letra)){
-                            encontrado=true;
-                            posicion[0]=4;
-                            posicion[1]=i;
-                            posicion[2]=j;
-                        }
+        }
+
+        if(encontrado==false) {
+            for (int i = 0; i < 4; i++) {
+                for (int j = 0; j < 4; j++) {
+                    if (floor4[i][j].equals(letra)) {
+                        encontrado = true;
+                        posicion[0] = 4;
+                        posicion[1] = i;
+                        posicion[2] = j;
                     }
                 }
             }
@@ -250,7 +255,8 @@ public class Main {
         return posicion;
     }
 
-    public static void encriptar(String[][] trigramas){
+    //Proceso de encriptacion,
+    public static String encriptar(String[][] trigramas){
         String encryptedText = "";
         for (int i = 0 ; i < trigramas.length;i++){
             primeraLetra=encontrarPosicion(trigramas[i][0]);
@@ -283,8 +289,69 @@ public class Main {
             } else if(segundaLetra[0]==4){
                 encryptedText+=floor4[terceraLetra[1]][primeraLetra[2]];
             }
+            //encryptedText += " ";
         }
-        System.out.println(encryptedText);
+        System.out.println("\n" + "Mensaje encriptado\n" + encryptedText + "\n");
+        return encryptedText;
+    }
+
+    //Proceso de decriptacion
+    public static String desencriptar(String[][] nuevostrigramas ){
+
+        String decryptedText = "";
+        for (int i = 0 ; i < nuevostrigramas.length;i++){
+            primeraLetra=encontrarPosicion(nuevostrigramas[i][0]);
+            segundaLetra=encontrarPosicion(nuevostrigramas[i][1]);
+            terceraLetra=encontrarPosicion(nuevostrigramas[i][2]);
+            if(segundaLetra[0]==1){
+                decryptedText+=floor1[primeraLetra[1]][terceraLetra[2]];
+            } else if(segundaLetra[0]==2){
+                decryptedText+=floor2[primeraLetra[1]][terceraLetra[2]];
+            } else if(segundaLetra[0]==3){
+                decryptedText+=floor3[primeraLetra[1]][terceraLetra[2]];
+            } else if(segundaLetra[0]==4){
+                decryptedText+=floor4[primeraLetra[1]][terceraLetra[2]];
+            }
+            if(terceraLetra[0]==1){
+                decryptedText += floor1[segundaLetra[1]][primeraLetra[2]];
+            } else if(terceraLetra[0]==2){
+                decryptedText += floor2[segundaLetra[1]][primeraLetra[2]];
+            } else if(terceraLetra[0]==3){
+                decryptedText += floor3[segundaLetra[1]][primeraLetra[2]];
+            } else if(terceraLetra[0]==4){
+                decryptedText += floor4[segundaLetra[1]][primeraLetra[2]];
+            }
+            if(primeraLetra[0]==1){
+                decryptedText+=floor1[terceraLetra[1]][segundaLetra[2]];
+            } else if(primeraLetra[0]==2){
+                decryptedText+=floor2[terceraLetra[1]][segundaLetra[2]];
+            } else if(primeraLetra[0]==3){
+                decryptedText+=floor3[terceraLetra[1]][segundaLetra[2]];
+            } else if(primeraLetra[0]==4){
+                decryptedText+=floor4[terceraLetra[1]][segundaLetra[2]];
+            }
+
+
+            //decryptedText += " ";
+        }
+        System.out.println("\n" + "Mensaje desencriptado\n" + decryptedText + "\n");
+        return decryptedText;
+    }
+
+    //Los trigramas que se obtienen de la encriptacion para pasarlos a encriptacion
+    //En escencia esto solo pasa del string obtenido en encriptacion a una matriz
+    public static String[][] crearnuevosTrigramas(String mensajeencriptado) {
+        int j = 0;
+        String[][] nuevostrigramas = new String[mensajeencriptado.length()][3];
+        for (int i=0; i < mensajeencriptado.length(); i = i+3) {
+            if (!((i + 2) >= mensajeencriptado.length())) {
+                nuevostrigramas[j][0] = String.valueOf(mensajeencriptado.charAt(i));
+                nuevostrigramas[j][1] = String.valueOf(mensajeencriptado.charAt(i + 1));
+                nuevostrigramas[j][2] = String.valueOf(mensajeencriptado.charAt(i + 2));
+                j++;
+            }
+        }
+        return nuevostrigramas;
     }
 
     public static void main(String[] args) {
@@ -344,6 +411,7 @@ public class Main {
         ArrayList<String> passwd = checkPass(password);
         listpass =(preLlenado(passwd));
         llenarMatrices(passwd);
-        encriptar(crearTrigramas(message));
+        String mensajeencriptado = encriptar(crearTrigramas(message));
+        String resultado = desencriptar(crearnuevosTrigramas(mensajeencriptado));
     }
 }
