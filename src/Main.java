@@ -12,7 +12,9 @@ public class Main {
     static String[][] floor4 = new String [4][4];
 
     //Listas de posiciones para encriptacion
-    static ArrayList<Integer> positions = new ArrayList<Integer>();
+    static int[] primeraLetra = new int[3];
+    static int[] segundaLetra = new int[3];
+    static int[] terceraLetra = new int[3];
 
 
     //Revisamos la contrasena para que salga sin letras repetidas
@@ -123,10 +125,8 @@ public class Main {
         System.out.print("\n");
     }
 
-    //Comparamos los caracteres de nuestra contraseña con el que 
-    //contiene todos los demás para eliminar los de nuestra contraseña
-    //en este y así tener los que se pondrán en las matrices de los 
-    //pisos una vez que ya se haya puesto la contraseña
+    //Comparamos los caracteres de nuestra contrasena con el que contiene todos los faltantes
+    //para removerlos y tener una lista mas limpia.
     public static ArrayList<String> preLlenado (ArrayList<String> passwd) {
         for (int i= 0 ; i < passwd.size();i++) {
             for (int j=0; j< listpass.size(); j++){
@@ -198,35 +198,94 @@ public class Main {
         return trigramas;
     }
 
-    public static void buscarPosiciones(String[][] resultante) {
-        int j = 0;
-        for (int i = 0; i < 1; i++) {
-            if (resultante[j][i].equals(floor1[j][i])) {
-                System.out.println("ifoundu");
-                //j++
+    public static int[] encontrarPosicion(String letra) {
+        boolean encontrado = false;
+        int[] posicion = new int[3];
+        for(int i=0; i < 4;i++){
+            for (int j=0;j < 4;j++){
+                if(floor1[i][j].equals(letra)){
+                    encontrado=true;
+                    posicion[0]=1;
+                    posicion[1]=i;
+                    posicion[2]=j;
+                }
             }
-            if (resultante[j][i] == floor2[j][i]) {
-                System.out.println("ifoundu");
-                //j++;
-            }
-            else if (resultante[j][i] == floor3[j][i]) {
-                System.out.println("ifoundu");
-                //j++;
-            }
-            else if (resultante[j][i] == floor4[j][i]) {
-                System.out.println("ifoundu");
-                //j++;
-            }
-            j++;
         }
+        if(encontrado==false){
+            for(int i=0; i <4;i++){
+                for (int j=0;j<4;j++){
+                    if(floor2[i][j].equals(letra)){
+                        encontrado=true;
+                        posicion[0]=2;
+                        posicion[1]=i;
+                        posicion[2]=j;
+                    }
+                }
+            }
+        } else if(encontrado==false){
+            for(int i=0; i <4;i++){
+                for (int j=0;j<4;j++){
+                    if(floor3[i][j].equals(letra)){
+                        encontrado=true;
+                        posicion[0]=3;
+                        posicion[1]=i;
+                        posicion[2]=j;
+                    }
+                }
+            }
+        } else {
+            if(encontrado==false){
+                for(int i=0; i <4;i++){
+                    for (int j=0;j<4;j++){
+                        if(floor4[i][j].equals(letra)){
+                            encontrado=true;
+                            posicion[0]=4;
+                            posicion[1]=i;
+                            posicion[2]=j;
+                        }
+                    }
+                }
+            }
+        }
+        return posicion;
     }
 
-    /*
-    public static String[][] encriptar(String[][] trigramas) {
-        for(int i = 0; i < trigramas.length; i++) {
-            if()
+    public static void encriptar(String[][] trigramas){
+        String encryptedText = "";
+        for (int i = 0 ; i < trigramas.length;i++){
+            primeraLetra=encontrarPosicion(trigramas[i][0]);
+            segundaLetra=encontrarPosicion(trigramas[i][1]);
+            terceraLetra=encontrarPosicion(trigramas[i][2]);
+            if(terceraLetra[0]==1){
+                encryptedText += floor1[primeraLetra[1]][segundaLetra[2]];
+            } else if(terceraLetra[0]==2){
+                encryptedText += floor2[primeraLetra[1]][segundaLetra[2]];
+            } else if(terceraLetra[0]==3){
+                encryptedText += floor3[primeraLetra[1]][segundaLetra[2]];
+            } else if(terceraLetra[0]==4){
+                encryptedText += floor4[primeraLetra[1]][segundaLetra[2]];
+            }
+            if(primeraLetra[0]==1){
+                encryptedText+=floor1[segundaLetra[1]][terceraLetra[2]];
+            } else if(primeraLetra[0]==2){
+                encryptedText+=floor2[segundaLetra[1]][terceraLetra[2]];
+            } else if(primeraLetra[0]==3){
+                encryptedText+=floor3[segundaLetra[1]][terceraLetra[2]];
+            } else if(primeraLetra[0]==4){
+                encryptedText+=floor4[segundaLetra[1]][terceraLetra[2]];
+            }
+            if(segundaLetra[0]==1){
+                encryptedText+=floor1[terceraLetra[1]][primeraLetra[2]];
+            } else if(segundaLetra[0]==2){
+                encryptedText+=floor2[terceraLetra[1]][primeraLetra[2]];
+            } else if(segundaLetra[0]==3){
+                encryptedText+=floor3[terceraLetra[1]][primeraLetra[2]];
+            } else if(segundaLetra[0]==4){
+                encryptedText+=floor4[terceraLetra[1]][primeraLetra[2]];
+            }
         }
-    }*/
+        System.out.println(encryptedText);
+    }
 
     public static void main(String[] args) {
 
@@ -285,7 +344,6 @@ public class Main {
         ArrayList<String> passwd = checkPass(password);
         listpass =(preLlenado(passwd));
         llenarMatrices(passwd);
-        String[][] resultante = crearTrigramas(message);
-        buscarPosiciones(resultante);
+        encriptar(crearTrigramas(message));
     }
 }
